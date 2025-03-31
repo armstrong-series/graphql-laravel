@@ -5,8 +5,7 @@ namespace App\GraphQL\Mutations;
 use App\Contracts\TaskInterface;
 use App\Models\Task;
 use Exception;
-use Illuminate\Http\JsonResponse;
-
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TaskMutation
 {
@@ -19,14 +18,14 @@ class TaskMutation
 
     public function create($root, array $args): ?Task
     {
-        return $this->taskContract->create($args); 
+        return $this->taskContract->create($args);
     }
-    
-    
+
+
 
     public function update($root, mixed $args): ?Task
     {
-    
+
         if (!is_array($args) || empty($args)) {
             throw new Exception("Invalid arguments: args must be a non-empty array.");
         }
@@ -43,13 +42,24 @@ class TaskMutation
     }
 
 
-    public function delete($root, $args): bool
+
+    public function delete($root, $args): array
     {
-
-        if (!is_array($args) || !isset($args['id'])) {
-            throw new \Exception("Invalid arguments: 'id' is missing in TaskMutation@delete.");
+        if (!isset($args['id']) || empty($args['id'])) {
+            return [
+                'success' => false,
+                'message' => 'Task ID is required!',
+                'status_code' => 400
+            ];
         }
-
-        return $this->taskContract->delete($args['id']);
+    
+        $delete = $this->taskContract->delete($args['id']);
+    
+        return [
+            'success'     => (bool) $delete, 
+            'message'     => $delete ? 'Delete complete' : 'Task not found!',
+            'status_code' => $delete ? 204 : 404
+        ];
     }
+    
 }

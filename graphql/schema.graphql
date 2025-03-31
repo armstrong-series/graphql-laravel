@@ -9,8 +9,14 @@ type Query {
     tasks(first: Int!, page: Int): [Task!]! @paginate(model: "App\\Models\\Task", defaultCount: 10)
 }
 
+type ApiResponse {
+    success: Boolean!
+    message: String!
+    status_code: Int
+}
+
 type Mutation {
-    signin(email: String!, password: String!): AuthPayload @field(resolver: "AuthMutation@signin")
+    signin(email: String!, password: String!): Auth @field(resolver: "AuthMutation@signin")
   
     createTask(
       title: String!,
@@ -19,7 +25,7 @@ type Mutation {
       description: String
     ): Task @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@create")
 
-    deleteTask(id: ID!): Boolean @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@delete")
+    deleteTask(id: ID!): ApiResponse @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@delete")
 
 }
 
@@ -33,7 +39,7 @@ type Task {
     json_response: JSON
 }
 
-type AuthPayload {
+type Auth {
     success: Boolean!
     message: String!
     token: String

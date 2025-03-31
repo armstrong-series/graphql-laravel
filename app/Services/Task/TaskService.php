@@ -67,6 +67,12 @@ class TaskService implements TaskInterface
     public function delete(string $id): bool
     {
         $task = Task::where('id', $id)->first();
-        return $task ? $task->delete() : false;
+    
+        if (!$task) {
+            return false;
+        }
+    
+        return (bool) $task->delete();
     }
+    
 }
