@@ -4,13 +4,16 @@ namespace App\Services\Task;
 
 use App\Contracts\TaskInterface;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
 
 class TaskService implements TaskInterface
 {
 
-    public function tasks(): array
+    public function tasks(): Collection
     {
-        return Task::all()->toArray() ?? [];
+        return Task::with('user')->get();
     }
 
 
@@ -20,11 +23,26 @@ class TaskService implements TaskInterface
         return Task::where('id', $id)->first();
     }
 
-    public function create(array $data): Task
-    {
-        return Task::create($data);
-    }
 
+    public function create(array $data): ?Task
+    {
+        $user = Auth::user();
+    
+        if (!$user) {
+            throw new \Exception("Unauthorized!");
+        }
+    
+        $task = Task::create([
+            'title'       => $data['title'],
+            'status'      => $data['status'],
+            'description' => $data['description'] ?? null,
+            'due_date'    => $data['due_date'],
+            'user_id'     => $user->id,
+        ]);
+    
+        return $task; 
+    }
+    
 
     public function update(string $id, array $data): ?Task
     {

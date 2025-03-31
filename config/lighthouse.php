@@ -18,6 +18,9 @@ return [
 
   'schema' => [
         'register' => base_path('graphql/schema.graphql'),
+        'middlewares' => [
+            'auth:api',
+        ],
     ],
 
     'queries' => [
@@ -26,12 +29,12 @@ return [
         'task'  => App\GraphQL\Queries\TaskQuery::class . '@task',
     ],
 
-    // 'mutations' => [
-    //     'signin'     => App\GraphQL\Mutations\AuthMutation::class . '@signin',
-    //     'createTask' => App\GraphQL\Mutations\TaskMutation::class . '@create',
-    //     'updateTask' => App\GraphQL\Mutations\TaskMutation::class . '@update',
-    //     'deleteTask' => App\GraphQL\Mutations\TaskMutation::class . '@delete',
-    // ],
+    'mutations' => [
+        'signin'     => App\GraphQL\Mutations\AuthMutation::class . '@signin',
+        'createTask' => App\GraphQL\Mutations\TaskMutation::class . '@create',
+        'updateTask' => App\GraphQL\Mutations\TaskMutation::class . '@update',
+        'deleteTask' => App\GraphQL\Mutations\TaskMutation::class . '@delete',
+    ],
 
 
     'route' => [
@@ -84,7 +87,9 @@ return [
     |
     */
 
-    'guards' => null,
+   
+    'guards' => ['api'], 
+
 
     /*
     |--------------------------------------------------------------------------
@@ -208,7 +213,7 @@ return [
     */
 
     'namespaces' => [
-        'models' => ['App', 'App\\Models'],
+        // 'models' => ['App', 'App\\Models'],
         'queries' => 'App\\GraphQL\\Queries',
         'mutations' => 'App\\GraphQL\\Mutations',
         'subscriptions' => 'App\\GraphQL\\Subscriptions',
@@ -218,6 +223,7 @@ return [
         'scalars' => 'App\\GraphQL\\Scalars',
         'directives' => 'App\\GraphQL\\Directives',
         'validators' => 'App\\GraphQL\\Validators',
+        'models' => 'App\\Models'
     ],
 
     /*

@@ -4,32 +4,26 @@ namespace App\GraphQL\Queries;
 
 use App\Contracts\TaskInterface;
 use App\Models\Task;
-use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 
 class TaskQuery
 {
 
-    protected $taskService;
 
-    public function __construct(TaskInterface $taskService)
-    {
-        $this->taskService = $taskService; 
-    }
+    public function __construct(
+        protected TaskInterface $taskContract)
+    {}
 
-    public function tasks(): array
+    public function tasks(): Collection
     {
-        return $this->taskService->tasks();
+        return $this->taskContract->tasks();
     }
 
 
     public function task($root, $args): ?Task
     {
-       
-
-
-        Log::info('TaskQuery@task received:', ['args' => $args]);
-
+    
         if (!isset($args) || !is_array($args)) {
             throw new Exception("Invalid arguments: 'args' must be an array.");
         }
@@ -40,6 +34,6 @@ class TaskQuery
         }
     
 
-        return $this->taskService->task($args['id']);
+        return $this->taskContract->task($args['id']);
     }
 }
