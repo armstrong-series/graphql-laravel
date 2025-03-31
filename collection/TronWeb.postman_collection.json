@@ -1,0 +1,227 @@
+{
+	"info": {
+		"_postman_id": "237f0463-50c4-466a-a4b8-fb608d89916f",
+		"name": "TronWeb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39268478",
+		"_collection_link": "https://interstellar-spaceship-492620.postman.co/workspace/c75ce571-4205-4922-8939-5ab9d45b709e/collection/39268478-237f0463-50c4-466a-a4b8-fb608d89916f?action=share&source=collection_link&creator=39268478"
+	},
+	"item": [
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC50YXNrLW1hbmFnZW1lbnQudGVzdC9ncmFwaHFsIiwiaWF0IjoxNzQzNDEzNDgzLCJleHAiOjE3NDM0MTcwODMsIm5iZiI6MTc0MzQxMzQ4MywianRpIjoiaE9yQkE0WFBPcTFCd3RxQSIsInN1YiI6IjllOGY0MGM5LWQzYzUtNGViZC1hZjc5LWI5MDBjOTY0NDk1MCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.4VJZI4Y4xQe4vMmXaw7FmiSuNFgOLFOiziANCiX3ye4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation CreateTask($title: String!, $status: String!, $due_date: String!, $description: String) { createTask(title: $title, status: $status, due_date: $due_date, description: $description) { id title status due_date description } }\",\n  \"variables\": {\n    \"title\": \"Complete GraphQL API\",\n    \"status\": \"pending\",\n    \"due_date\": \"2025-04-10\",\n    \"description\": \"Updating API to support optional fields.\"\n  }\n}\n\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC50YXNrLW1hbmFnZW1lbnQudGVzdC9ncmFwaHFsIiwiaWF0IjoxNzQzNDEzNDgzLCJleHAiOjE3NDM0MTcwODMsIm5iZiI6MTc0MzQxMzQ4MywianRpIjoiaE9yQkE0WFBPcTFCd3RxQSIsInN1YiI6IjllOGY0MGM5LWQzYzUtNGViZC1hZjc5LWI5MDBjOTY0NDk1MCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.4VJZI4Y4xQe4vMmXaw7FmiSuNFgOLFOiziANCiX3ye4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"query { tasks(first: 5, page: 1) { data { id title status description due_date user_id } paginatorInfo { total perPage currentPage lastPage hasMorePages } } }\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTask",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC50YXNrLW1hbmFnZW1lbnQudGVzdC9ncmFwaHFsIiwiaWF0IjoxNzQzNDEzNDgzLCJleHAiOjE3NDM0MTcwODMsIm5iZiI6MTc0MzQxMzQ4MywianRpIjoiaE9yQkE0WFBPcTFCd3RxQSIsInN1YiI6IjllOGY0MGM5LWQzYzUtNGViZC1hZjc5LWI5MDBjOTY0NDk1MCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.4VJZI4Y4xQe4vMmXaw7FmiSuNFgOLFOiziANCiX3ye4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"query Task($id: ID!) { task(id: $id) { id title status description due_date user_id } }\",\n  \"variables\": {\n    \"id\": \"9e9012fd-e101-4850-bd5b-a62c98cc79d8\"\n  }\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC50YXNrLW1hbmFnZW1lbnQudGVzdC9ncmFwaHFsIiwiaWF0IjoxNzQzNDM2MTcwLCJleHAiOjE3NDM0Mzk3NzAsIm5iZiI6MTc0MzQzNjE3MCwianRpIjoiRnlyalk1Zk96MXZkQnpmVSIsInN1YiI6IjllOGY0MGM5LWQzYzUtNGViZC1hZjc5LWI5MDBjOTY0NDk1MCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.IJA7ID75Fvhb0litAh1GyX6KG0OYG3SxL58sAdlReao",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation { deleteTask(id: \\\"9e90146f-31e7-49d9-b1ef-b5941d69a954\\\") { success message status_code } }\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC50YXNrLW1hbmFnZW1lbnQudGVzdC9ncmFwaHFsIiwiaWF0IjoxNzQzNDM2MTcwLCJleHAiOjE3NDM0Mzk3NzAsIm5iZiI6MTc0MzQzNjE3MCwianRpIjoiRnlyalk1Zk96MXZkQnpmVSIsInN1YiI6IjllOGY0MGM5LWQzYzUtNGViZC1hZjc5LWI5MDBjOTY0NDk1MCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.IJA7ID75Fvhb0litAh1GyX6KG0OYG3SxL58sAdlReao",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation { updateTask(id: \\\"9e901483-89eb-4928-905b-1535f91e20a3\\\", title: \\\"New Task Title\\\", status: \\\"completed\\\", description: \\\"New description\\\") { success message status_code } }\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Signin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation SignIn($email: String!, $password: String!) { signin(email: $email, password: $password) { success message token user { id name email } } }\",\n  \"variables\": {\n    \"email\": \"jonathan.dolphins@tronweb.co\",\n    \"password\": \"password\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

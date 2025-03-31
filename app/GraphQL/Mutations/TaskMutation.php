@@ -23,22 +23,38 @@ class TaskMutation
 
 
 
-    public function update($root, mixed $args): ?Task
+    public function update($root, array $args): array
     {
-
-        if (!is_array($args) || empty($args)) {
-            throw new Exception("Invalid arguments: args must be a non-empty array.");
+        if (!isset($args['id']) || empty($args['id'])) {
+            return [
+                'success' => false,
+                'message' => 'Task ID is required!',
+                'status_code' => 400
+            ];
         }
 
-        if (empty($args['id'])) {
-            throw new Exception("Invalid arguments: 'id' is required.");
+        $task = Task::where('id',$args['id'])->first();
+
+        if (!$task) {
+            return [
+                'success' => false,
+                'message' => 'Task not found!',
+                'status_code' => 404
+            ];
         }
 
-        if (isset($args['due_date']) && !strtotime($args['due_date'])) {
-            throw new Exception("Invalid due_date format. Use YYYY-MM-DD HH:MM:SS.");
-        }
+        $updated = $task->update(array_filter([
+            'title'       => $args['title'] ?? $task->title,
+            'status'      => $args['status'] ?? $task->status,
+            'due_date'    => $args['due_date'] ?? $task->due_date,
+            'description' => $args['description'] ?? $task->description,
+        ]));
 
-        return $this->taskContract->update($args['id'], $args);
+        return [
+            'success'     => (bool) $updated,
+            'message'     => $updated ? 'Update completed!' : 'No changes were made.',
+            'status_code' => $updated ? 200 : 304
+        ];
     }
 
 
@@ -57,7 +73,7 @@ class TaskMutation
     
         return [
             'success'     => (bool) $delete, 
-            'message'     => $delete ? 'Delete complete' : 'Task not found!',
+            'message'     => $delete ? 'Delete completed!' : 'Task not found!',
             'status_code' => $delete ? 204 : 404
         ];
     }

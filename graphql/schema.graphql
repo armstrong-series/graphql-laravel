@@ -25,7 +25,17 @@ type Mutation {
       description: String
     ): Task @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@create")
 
-    deleteTask(id: ID!): ApiResponse @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@delete")
+     updateTask(
+      id: ID!,
+      title: String,
+      status: String,
+      due_date: String,
+      description: String
+    ): ApiResponse @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@update")
+
+    deleteTask(
+        id: ID!
+    ): ApiResponse @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@delete")
 
 }
 
