@@ -5,33 +5,42 @@ namespace App\Services\Task;
 use App\Contracts\TaskInterface;
 use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
-use Exception;
-use Illuminate\Database\Eloquent\Collection;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskService implements TaskInterface
 {
 
-    public function tasks(): Collection
+
+
+    public function tasks(int $first, int $page): LengthAwarePaginator
     {
-        return Task::with('user')->get();
+        return Task::with('user')->paginate($first, ['*'], 'page', $page);
     }
 
 
 
     public function task(string $id): ?Task
     {
-        return Task::where('id', $id)->first();
+        $task = Task::where('id', $id)->first();
+
+        if (!$task) {
+            throw new HttpException(400, "Invalid Task ID!");
+        }
+
+        return $task;
     }
+
 
 
     public function create(array $data): ?Task
     {
         $user = Auth::user();
-    
+
         if (!$user) {
             throw new \Exception("Unauthorized!");
         }
-    
+
         $task = Task::create([
             'title'       => $data['title'],
             'status'      => $data['status'],
@@ -39,10 +48,10 @@ class TaskService implements TaskInterface
             'due_date'    => $data['due_date'],
             'user_id'     => $user->id,
         ]);
-    
-        return $task; 
+
+        return $task;
     }
-    
+
 
     public function update(string $id, array $data): ?Task
     {

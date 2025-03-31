@@ -2,14 +2,12 @@
 
 namespace App\Contracts;
 use App\Models\Task;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface TaskInterface
 {
 
-    // public function tasks(): array;
-    public function tasks(): \Illuminate\Database\Eloquent\Collection;
+    public function tasks(int $first, int $page): LengthAwarePaginator; 
     public function task(string $id): ?Task;
     public function create(array $data): ?Task;
     public function update(string $id, array $data): ?Task;

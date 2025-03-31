@@ -5,35 +5,39 @@ namespace App\GraphQL\Queries;
 use App\Contracts\TaskInterface;
 use App\Models\Task;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskQuery
 {
 
 
     public function __construct(
-        protected TaskInterface $taskContract)
-    {}
+        protected TaskInterface $taskContract
+    ) {}
 
-    public function tasks(): Collection
+
+
+    public function tasks($root, array $args): LengthAwarePaginator
     {
-        return $this->taskContract->tasks();
+        return $this->taskContract->tasks($args['first'], $args['page'] ?? 1);
     }
 
 
-    public function task($root, $args): ?Task
+    public function task($root, array $args): ?Task
     {
-    
-        if (!isset($args) || !is_array($args)) {
-            throw new Exception("Invalid arguments: 'args' must be an array.");
-        }
-    
+        
 
         if (!isset($args['id']) || !is_string($args['id'])) {
-            throw new Exception("Invalid arguments: 'id' is required and must be a string.");
+            throw new Exception("Invalid Identifier!");
         }
-    
+        
+        $task = $this->taskContract->task($args['id']);
 
-        return $this->taskContract->task($args['id']);
+       
+        if (!$task) {
+            throw new Exception("Invalid Task ID!");
+        }
+
+        return $task;
     }
 }
