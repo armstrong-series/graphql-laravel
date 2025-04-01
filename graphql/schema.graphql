@@ -16,21 +16,25 @@ type ApiResponse {
 }
 
 type Mutation {
-    signin(email: String!, password: String!): Auth @field(resolver: "AuthMutation@signin")
+   signin(
+       email: String @rules(apply: ["required", "email"]) @scope(name: "email"),
+       password: String @rules(apply: ["required", "min:6"]) @scope(name: "password")
+   ): Auth @field(resolver: "AuthMutation@signin")
+
   
     createTask(
-      title: String!,
+      title: String @rules(apply: ["required", "string", "max:255"]),
       status: String!,
-      due_date: String!,
-      description: String
+      due_date: String! @rules(apply: ["required", "date_format:Y-m-d", "after_or_equal:today"]),
+      description: String @rules(apply: ["nullable", "string"])
     ): Task @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@create")
 
      updateTask(
-      id: ID!,
+      id: ID! @rules(apply: ["required", "exists:tasks,id"]),
       title: String,
       status: String,
       due_date: String,
-      description: String
+      description: String @rules(apply: ["nullable", "string"])
     ): ApiResponse @guard(with: ["api"]) @field(resolver: "App\\GraphQL\\Mutations\\TaskMutation@update")
 
     deleteTask(
